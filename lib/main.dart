@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+
+import 'apis/dio.dart';
+import 'apis/demo.dart';
 
 void main() {
   runApp(const MyApp());
@@ -57,6 +61,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -66,10 +71,16 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+
+    getProjectStatus();
   }
 
   @override
   Widget build(BuildContext context) {
+     createDio(BaseOptions(
+       baseUrl: 'https://api.github.com',
+     ));
+
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //

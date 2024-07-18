@@ -1,6 +1,6 @@
 class ApiClientConfig {
   /// The base URL of the API endpoint.
-  String baseURL;
+  String? baseURL;
 
   /// The URL of the API endpoint.
   String url;
@@ -12,7 +12,7 @@ class ApiClientConfig {
   Map<String, dynamic>? params;
 
   /// The timeout in milliseconds for the request.
-  int timeout;
+  int? timeout;
 
   /// The function to call when an error occurs.
   Function(String)? onError;
@@ -21,11 +21,11 @@ class ApiClientConfig {
   Function()? onLogin;
 
   ApiClientConfig({
-    required this.baseURL,
+    this.baseURL,
     required this.url,
     required this.method,
     this.params,
-    required this.timeout,
+    this.timeout,
     this.onError,
     this.onLogin,
   });

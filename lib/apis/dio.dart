@@ -2,6 +2,10 @@ import 'package:dio/dio.dart';
 
 import 'api_client_base.dart';
 
+abstract class MapSerializable<T> {
+  T fromJson(Map<String, dynamic> json);
+}
+
 Dio dio = Dio();
 
 ///  添加拦截器
@@ -56,7 +60,7 @@ String parseUrl(String url, Map<String, String> pathParams) {
 /// Returns a [Future] that resolves to the response data of type [T].
 ///
 /// Throws a [DioException] if the request fails. The exception contains the response data if available.
-Future<T> request<T>(ApiClientConfig instance) async {
+Future<T> request<T extends MapSerializable<T>>(ApiClientConfig instance) async {
   // Parse the URL by replacing path parameters with their corresponding values
   final url = parseUrl(instance.url, (instance.params?['path']) ?? {});
 
@@ -77,7 +81,7 @@ Future<T> request<T>(ApiClientConfig instance) async {
     }
 
     // Return the response data as type T
-    return response.data as T;
+    return (T as MapSerializable<T>).fromJson(response.data);
   } on DioException catch (e) {
     // If the response is not null and the status code is not ok, call the onError callback with the status message
     if (e.response != null && !e.response!.statusCode!.isOk) {
