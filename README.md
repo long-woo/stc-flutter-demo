@@ -1,6 +1,6 @@
-# flutter_application_1
+# stc_flutter_demo
 
-A new Flutter project.
+The Flutter project using STC.
 
 ## Getting Started
 
