@@ -123,6 +123,13 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+
+            TextButton(
+              onPressed: () {
+                getPatientParamsById();
+              },
+              child: const Text('Get Project Status'),
+            ),
           ],
         ),
       ),

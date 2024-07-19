@@ -1,9 +1,9 @@
-import 'package:dio/dio.dart';
+import 'dart:ffi';
 
 import 'api_client_base.dart';
 import 'dio.dart';
 
-class GetProjectStatusResponse implements MapSerializable<GetProjectStatusResponse> {
+class GetProjectStatusResponse {
   bool success = false;
   String? message;
   GetProjectStatusResponseObj? obj;
@@ -14,13 +14,13 @@ class GetProjectStatusResponse implements MapSerializable<GetProjectStatusRespon
     this.obj
   });
 
-  // factory GetProjectStatusResponse.fromJson(Map<String, dynamic> json) {
-  //   return GetProjectStatusResponse(
-  //     success: json['success'],
-  //     message: json['message'],
-  //     obj: GetProjectStatusResponseObj.fromJson(json['obj'])
-  //   );
-  // }
+  factory GetProjectStatusResponse.fromJson(Map<String, dynamic> json) {
+    return GetProjectStatusResponse(
+      success: json['success'],
+      message: json['message'],
+      obj: GetProjectStatusResponseObj.fromJson(json['obj'])
+    );
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -31,18 +31,9 @@ class GetProjectStatusResponse implements MapSerializable<GetProjectStatusRespon
 
     return data;
   }
-  
-  @override
-  GetProjectStatusResponse fromJson(Map<String, dynamic> json) {
-    return GetProjectStatusResponse(
-      success: json['success'],
-      message: json['message'],
-      obj: GetProjectStatusResponseObj.fromJson(json['obj'])
-    );
-  }
 }
 
-class GetProjectStatusResponseObj implements MapSerializable<GetProjectStatusResponseObj> {
+class GetProjectStatusResponseObj {
   String id = '';
   int status = 0;
 
@@ -66,19 +57,98 @@ class GetProjectStatusResponseObj implements MapSerializable<GetProjectStatusRes
 
     return data;
   }
-  
-  @override
-  GetProjectStatusResponseObj fromJson(Map<String, dynamic> json) {
-    return GetProjectStatusResponseObj(
-      id: json['id'],
-      status: json['status']
+}
+
+class GetPatientParamsByIdResponse {
+  bool success = false;
+  String? message;
+  GetPatientParamsByIdResponseObj? obj;
+
+  GetPatientParamsByIdResponse({
+    required this.success,
+    this.message,
+    this.obj
+  });
+
+  factory GetPatientParamsByIdResponse.fromJson(Map<String, dynamic> json) {
+    return GetPatientParamsByIdResponse(
+      success: json['success'],
+      message: json['message'],
+      obj: GetPatientParamsByIdResponseObj.fromJson(json['obj'])
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+
+    data['success'] = success;
+    data['message'] = message;
+    data['obj'] = obj;
+
+    return data;
+  }
+}
+
+class GetPatientParamsByIdResponseObj {
+  int projectType;
+	String params;
+	String paramsName;
+	String requiredParams;
+	String displayParams;
+	String displayParamsName;
+	String batchParams;
+	int patientNoRules;
+	int nameAbbrRules;
+	int setupDateRules;
+
+  GetPatientParamsByIdResponseObj({
+    required this.projectType,
+    required this.params,
+    required this.paramsName,
+    required this.requiredParams,
+    required this.displayParams,
+    required this.displayParamsName,
+    required this.batchParams,
+    required this.patientNoRules,
+    required this.nameAbbrRules,
+    required this.setupDateRules
+  });
+
+  factory GetPatientParamsByIdResponseObj.fromJson(Map<String, dynamic> json) {
+    return GetPatientParamsByIdResponseObj(
+      projectType: json['projectType'],
+      params: json['params'],
+      paramsName: json['paramsName'],
+      requiredParams: json['requiredParams'],
+      displayParams: json['displayParams'],
+      displayParamsName: json['displayParamsName'],
+      batchParams: json['batchParams'],
+      patientNoRules: json['patientNoRules'],
+      nameAbbrRules: json['nameAbbrRules'],
+      setupDateRules: json['setupDateRules']
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+
+    data['projectType'] = projectType;
+    data['params'] = params;
+    data['paramsName'] = paramsName;
+    data['requiredParams'] = requiredParams;
+    data['displayParams'] = displayParams;
+    data['displayParamsName'] = displayParamsName;
+    data['batchParams'] = batchParams;
+    data['patientNoRules'] = patientNoRules;
+    data['nameAbbrRules'] = nameAbbrRules;
+    data['setupDateRules'] = setupDateRules;
+
+    return data;
   }
 }
 
 /// 获取项目状态
-Future<void> getProjectStatus() async {
-  // dio.transformer = BackgroundTransformer()..jsonDecodeCallback = GetProjectStatusResponse.fromJson;
+Future<GetProjectStatusResponse> getProjectStatus() async {
   var _res = await request<GetProjectStatusResponse>(
     ApiClientConfig(
       url: '/api/project/getProjectStatus',
@@ -88,7 +158,13 @@ Future<void> getProjectStatus() async {
           'projectId': '7491969461726838784'
         }
       }
-    ));
-    // final obj = GetProjectStatusResponse.fromJson(_res);
-    print(_res.success);
+    ), GetProjectStatusResponse.fromJson);
+
+    return _res;
+}
+
+Future<GetPatientParamsByIdResponse> getPatientParamsById() async {
+  var _res = await request<GetPatientParamsByIdResponse>(ApiClientConfig(url: '/api/project/patientParams/{id}', method: 'GET', params: {'path': {'id': '7491969461726838784'}, 'query': { 'projectId': '7491969461726838784', 'roleId': '7877591416784052224' }}), GetPatientParamsByIdResponse.fromJson);
+
+  return _res;
 }
