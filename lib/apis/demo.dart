@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'api_client_base.dart';
 import 'dio.dart';
 
@@ -18,7 +16,7 @@ class GetProjectStatusResponse {
     return GetProjectStatusResponse(
       success: json['success'],
       message: json['message'],
-      obj: GetProjectStatusResponseObj.fromJson(json['obj'])
+      obj: json['obj'] == null ? null : GetProjectStatusResponseObj.fromJson(json['obj'])
     );
   }
 
@@ -74,7 +72,7 @@ class GetPatientParamsByIdResponse {
     return GetPatientParamsByIdResponse(
       success: json['success'],
       message: json['message'],
-      obj: GetPatientParamsByIdResponseObj.fromJson(json['obj'])
+      obj: json['obj'] == null ? null : GetPatientParamsByIdResponseObj.fromJson(json['obj'])
     );
   }
 

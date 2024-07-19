@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
+import 'apis/api_client_base.dart';
 import 'apis/dio.dart';
 import 'apis/demo.dart';
 
 void main() {
+  createDio(ApiCreateConfig(
+    baseURL: 'https://api.mosquitotool.top',
+    onError: (error) {
+      Fluttertoast.showToast(msg: error, gravity: ToastGravity.TOP);
+    },
+    onLogin: () {
+       Fluttertoast.showToast(msg: '登录已失效，请重新登录', gravity: ToastGravity.TOP);
+    }
+  ));
   runApp(const MyApp());
 }
 
@@ -60,7 +70,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-
+  int _projectStatus = -1;
 
   void _incrementCounter() {
     setState(() {
@@ -71,16 +81,26 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+  }
 
-    getProjectStatus();
+  void _getProjectStatus() async {
+    var _res = await getProjectStatus();
+
+    if (!_res.success) return;
+    setState(() {
+      _projectStatus = _res.obj!.status;
+    });
+  }
+
+  void _getPatientParamsById() async {
+    var _res = await getPatientParamsById();
+
+    if (!_res.success) return;
+    print(_res.obj!.params);
   }
 
   @override
   Widget build(BuildContext context) {
-     createDio(BaseOptions(
-       baseUrl: 'https://api.github.com',
-     ));
-
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -124,11 +144,20 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
 
+            Text(
+              '项目状态：$_projectStatus',
+              style: Theme.of(context).textTheme.headlineMedium,),
+
+            // Text('')
+
             TextButton(
-              onPressed: () {
-                getPatientParamsById();
-              },
+              onPressed: _getProjectStatus,
               child: const Text('Get Project Status'),
+            ),
+
+            TextButton(
+              onPressed: _getPatientParamsById,
+              child: const Text('Get Patient Params By Id'),
             ),
           ],
         ),
